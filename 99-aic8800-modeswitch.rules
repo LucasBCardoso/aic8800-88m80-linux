@@ -1,0 +1,3 @@
+# AIC 88M80 dongle boots as a driver disk (1111:1111). Replay the Windows Usb_Driver.dll
+# vendor commands (FD..F3 GetHippo, FD..F2 Set_CS1_0) to switch it to WiFi mode (a69c:8d8x).
+ACTION=="add", SUBSYSTEM=="block", KERNEL=="sd?", ENV{ID_VENDOR_ID}=="1111", ENV{ID_MODEL_ID}=="1111", RUN+="/usr/bin/python3 -I /usr/local/sbin/aic8800-switch.py /dev/%k"
