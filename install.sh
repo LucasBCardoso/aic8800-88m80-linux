@@ -19,6 +19,12 @@ echo "== 2/4 Baixando e instalando driver + firmware aic8800 ($VER)"
 for p in aic8800-firmware aic8800-usb-dkms; do
     curl -fsSL -o "$TMP/${p}_${VER}_all.deb" "$URL/${p}_${VER//+/%2B}_all.deb"
 done
+# Hashes dos pacotes testados; aborta se o download não for exatamente o mesmo arquivo
+(cd "$TMP" && sha256sum -c --strict <<EOF
+0b7c5e229a4214f738e260cfdca45dc934abb5079890c709346577126dba94f8  aic8800-firmware_${VER}_all.deb
+50f73e0113c7fbc41502a7d5740b98d001a662df57ef0c0dceca5cb9a9503e13  aic8800-usb-dkms_${VER}_all.deb
+EOF
+) || { echo "ERRO: hash SHA-256 não confere — pacote alterado ou corrompido, abortando."; exit 1; }
 apt-get install -y "$TMP"/aic8800-firmware_*.deb "$TMP"/aic8800-usb-dkms_*.deb
 
 echo "== 3/4 Instalando script de troca de modo + regra udev"
